@@ -83,3 +83,7 @@ See also [golang/winstrap](https://github.com/golang/winstrap) and
 for more information of how to set up a general Go build environment on Windows
 with MinGW.
 
+## Vendoring
+
+Consul currently uses [govendor](https://github.com/kardianos/govendor) for
+vendoring.
