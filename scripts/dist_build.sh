@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-export GO15VENDOREXPERIMENT=1
-
 # Get the parent directory of where this script is.
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done

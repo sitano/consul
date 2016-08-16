@@ -3,7 +3,6 @@
 # This script builds the application from source for multiple platforms.
 set -e
 
-export GO15VENDOREXPERIMENT=1
 export CGO_ENABLED=0
 
 # Get the parent directory of where this script is.

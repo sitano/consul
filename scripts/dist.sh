@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-export GO15VENDOREXPERIMENT=1
-
 # Get the version from the command line.
 VERSION=$1
 if [ -z $VERSION ]; then
