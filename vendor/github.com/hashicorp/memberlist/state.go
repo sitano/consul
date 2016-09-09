@@ -240,6 +240,7 @@ func (m *Memberlist) probeNode(node *nodeState) {
 	deadline := time.Now().Add(probeInterval)
 	destAddr := &net.UDPAddr{IP: node.Addr, Port: int(node.Port)}
 	if node.State == stateAlive {
+		m.logger.Printf("[INFO] memberlist: send Probe/udp/ping %#v to %s/%s\n", ping, node, destAddr)
 		if err := m.encodeAndSendMsg(destAddr, pingMsg, &ping); err != nil {
 			m.logger.Printf("[ERR] memberlist: Failed to send ping: %s", err)
 			return
@@ -260,6 +261,8 @@ func (m *Memberlist) probeNode(node *nodeState) {
 			msgs = append(msgs, buf.Bytes())
 		}
 
+		m.logger.Printf("[INFO] memberlist: send Probe/udp/ping %#v to %s/%s\n", ping, node, destAddr)
+		m.logger.Printf("[INFO] memberlist: send Probe/udp/suspect %#v to %s/%s\n", s, node, destAddr)
 		compound := makeCompoundMessage(msgs)
 		if err := m.rawSendMsgUDP(destAddr, compound.Bytes()); err != nil {
 			m.logger.Printf("[ERR] memberlist: Failed to send compound ping and suspect message to %s: %s", destAddr, err)
@@ -407,6 +410,7 @@ func (m *Memberlist) Ping(node string, addr net.Addr) (time.Duration, error) {
 	m.setProbeChannels(ping.SeqNo, ackCh, nil, m.config.ProbeInterval)
 
 	// Send a ping to the node.
+	m.logger.Printf("[INFO] memberlist: send Ping/udp/ping %#v to %s/%s\n", ping, node, addr)
 	if err := m.encodeAndSendMsg(addr, pingMsg, &ping); err != nil {
 		return 0, err
 	}
@@ -484,6 +488,7 @@ func (m *Memberlist) gossip() {
 
 		// Send the compound message
 		destAddr := &net.UDPAddr{IP: node.Addr, Port: int(node.Port)}
+		m.logger.Printf("[INFO] memberlist: send gossip/udp/compound %#v to %#v/%s\n", compound.Bytes(), node, destAddr)
 		if err := m.rawSendMsgUDP(destAddr, compound.Bytes()); err != nil {
 			m.logger.Printf("[ERR] memberlist: Failed to send gossip to %s: %s", destAddr, err)
 		}

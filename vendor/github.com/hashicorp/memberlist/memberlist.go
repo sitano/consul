@@ -123,6 +123,8 @@ func newMemberlist(conf *Config) (*Memberlist, error) {
 		logger = log.New(logDest, "", log.LstdFlags)
 	}
 
+	logger.Printf("[INFO] memberlist: tcp listener: %#v\n", *tcpAddr)
+	logger.Printf("[INFO] memberlist: udp listener: %#v\n", *udpAddr)
 	m := &Memberlist{
 		config:         conf,
 		shutdownCh:     make(chan struct{}),
@@ -140,6 +142,7 @@ func newMemberlist(conf *Config) (*Memberlist, error) {
 	m.broadcasts.NumNodes = func() int {
 		return m.estNumNodes()
 	}
+	m.logger.Printf("[INFO] memberlist: configuration: %#v\n", *m.config)
 	go m.tcpListen()
 	go m.udpListen()
 	go m.udpHandler()
